@@ -1,0 +1,14 @@
+{
+  "name": "first_mocha",
+  "version": "1.0.0",
+  "description": "\"testing the new framework\"",
+  "main": "script.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "roxanne tabuena",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^10.5.2"
+  }
+}
