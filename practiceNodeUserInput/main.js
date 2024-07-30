@@ -36,6 +36,12 @@ The following steps were taken to enhance my knowledge of user input:
         Loses by landing on (and falling in) a hole.
         Attempts to move “outside” the field.
         When any of the above occur, let the user know and end the game.
+
+5.  Add a .generateField() method to your Field class. This doesn’t need to be tied to a particular instance, 
+    so make it a static method of the class itself.
+    This method should at least take arguments for the size of the field, and it should return a randomized two-dimensional 
+    array representing the field with a hat and one or more holes. In our solution, we added a second percentage argument 
+    used to determine what percent of the field should be covered in holes.
 */
 const prompt = require('prompt-sync')({sigint: true});
 
@@ -110,13 +116,52 @@ class Field {
         move === 'r' ? this._position.col += 1 :
         this._position.col -= 1
     }
+
+    static generateField(size, holeRatio){
+        if(typeof size === 'number' && typeof holeRatio === 'number'){
+            if(0 > holeRatio || holeRatio > 100){
+                console.log(`Holes must be an integer between 0 and 100 representing the percentage of holes you desire in your field.`)
+                console.log(`Please note the one plot will always be reserved for the players starting position, and one hole will always be reserved for the players hat`)
+            } else {
+                let itemsRemaining = size * size 
+                let holesRemaining = Math.ceil(itemsRemaining / 100 * holeRatio)
+                if(holesRemaining >= itemsRemaining - 2){
+                    holesRemaining = itemsRemaining - 2
+                }
+                let fieldArray = ['*', '^']
+                while(holesRemaining>0){
+                    fieldArray.push('O')
+                    holesRemaining -= 1
+                }
+                itemsRemaining -= fieldArray.length
+                while(itemsRemaining > 0){
+                    fieldArray.push('░')
+                    itemsRemaining -= 1
+                }
+                let index = fieldArray.length
+                while(index > 0){
+                    let randIndex = Math.floor(Math.random() * index);
+                    index -= 1
+                    const tempI = fieldArray[index]
+                    const tempRI = fieldArray[randIndex]
+                    fieldArray[index] = tempRI
+                    fieldArray[randIndex] = tempI
+                }
+                let field = []
+                while(fieldArray.length){
+                    let chunk = [...fieldArray.splice(0, size)]
+                    field.push(chunk)
+                }
+                return field
+            }
+        } else {
+            console.log('plese enter integer amounts for size and holes to generate a field')
+        }
+    }
 }
 
-let myField = new Field([
-    ['*', '░', 'O'],
-    ['░', 'O', '░'],
-    ['░', '^', '░'],
-    ]);
+
+let myField = new Field(Field.generateField(10, 45));
 
 let gameOver = false;
 let field = myField.print();
