@@ -213,6 +213,5 @@ class Field {
 }
 
 
-let myField = new Field(Field.generateField(2, 5));
-console.log(myField.print())
-console.log(myField.testPuzzle())
+let myField = new Field(Field.generateField(3, 5));
+myField.game()

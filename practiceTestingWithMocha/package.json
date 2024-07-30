@@ -1,14 +1,11 @@
 {
   "name": "practicetestingwithmocha",
   "version": "1.0.0",
-  "description": "",
+  "description": "\"testing the new framework\"",
   "main": "script.js",
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "mocha": "^10.7.0"
-  }
+  "author": "roxanne tabuena",
+  "license": "ISC"
 }
