@@ -56,6 +56,35 @@ class Field {
         this._position = this.findPosition()
     }
 
+    game(){
+        let gameOver = false;
+        let move;
+        console.log(`You are but a * in a field of ░.\nThis game is a quest to find your ^.`)    
+        console.log(`type u for up. \ntype d for down \ntype r for right \ntype l for left\n`)
+        while(gameOver === false){
+            console.log(this.print())
+            move = prompt(`Enter a move:`)
+            let validateMove = this.validateMove(move);
+            while (validateMove !== 'Move accepted'){
+                console.log(validateMove)
+                console.log(this.print())
+                move = prompt(`Enter a move:`)
+                validateMove = this.validateMove(move)
+            }
+            console.log(validateMove)
+            this.updatePosition(move);
+            const spot = this.findSpot();
+            if(spot === '░'){
+                this.updateField()
+            }else if (spot === 'O'){
+                console.log(`You have fallen into a O. Game Over =(`)
+                gameOver = true
+            }else if (spot === '^'){
+                console.log(`You have found your ^! Congratulations!`)
+                gameOver = true
+            }
+        }
+    }
 
     print(){
         let fieldString = ''
@@ -117,6 +146,29 @@ class Field {
         this._position.col -= 1
     }
 
+    testPuzzle(){
+        let cellPath = {L: true, LT: true, 
+                        T: true, RT: true,
+                        R: true, RB: true,
+                        B: true, BL: true}
+        let field = [...this._field]
+        let position = {...this._position}
+        function geomatrix(fieldArray){
+            let matrix = {}
+            let row = fieldArray.length - 1 
+            while(row>=0){
+                let col = fieldArray.length -1
+                while(col>=0){
+                    matrix[`${row}_${col}`] = fieldArray[row][col]
+                    col -= 1
+                }
+                row -= 1
+            }
+            return matrix
+        }
+        return geomatrix(this._field)
+    }
+
     static generateField(size, holeRatio){
         if(typeof size === 'number' && typeof holeRatio === 'number'){
             if(0 > holeRatio || holeRatio > 100){
@@ -161,34 +213,6 @@ class Field {
 }
 
 
-let myField = new Field(Field.generateField(10, 45));
-
-let gameOver = false;
-let field = myField.print();
-let move;
-console.log(`You are but a * in a field of ░.\nThis game is a quest to find your ^.`)    
-console.log(`type u for up. \ntype d for down \ntype r for right \ntype l for left\n`)
-while(gameOver === false){
-    console.log(myField.print())
-    move = prompt(`Enter a move:`)
-    let validateMove = myField.validateMove(move);
-    while (validateMove !== 'Move accepted'){
-        console.log(validateMove)
-        console.log(myField.print())
-        move = prompt(`Enter a move:`)
-        validateMove = myField.validateMove(move)
-    }
-    console.log(validateMove)
-    myField.updatePosition(move);
-    const spot = myField.findSpot();
-    console.log(spot)
-    if(spot === '░'){
-        myField.updateField()
-    }else if (spot === 'O'){
-        console.log(`You have fallen into a O. Game Over =(`)
-        gameOver = true
-    }else if (spot === '^'){
-        console.log(`You have found your ^! Congratulations!`)
-        gameOver = true
-    }
-}
+let myField = new Field(Field.generateField(2, 5));
+console.log(myField.print())
+console.log(myField.testPuzzle())
